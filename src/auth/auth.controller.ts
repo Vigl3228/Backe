@@ -59,4 +59,14 @@ export class AuthController {
         return response.sendStatus(200);
     }
 
+    @Get('profile')
+    @UseGuards(JwtGuard)
+    getprofile(@Req() request: RequestWithUser){
+        const {user} = request;
+        return{
+            ...user,
+            password: undefined
+        };
+    }
+   
 }

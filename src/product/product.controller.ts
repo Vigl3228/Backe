@@ -29,6 +29,7 @@ export class ProductController {
 
     }
 
+    
     @Delete(':id')
     remove(@Param('id') id: string): Promise<Product> {
         return this.productService.remove(id) 
