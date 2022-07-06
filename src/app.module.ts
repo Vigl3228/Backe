@@ -12,22 +12,40 @@ import { ProductModule } from './product/product.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 
-
-
 @Module({
-  imports: [MongooseModule.forRoot(`mongodb://localhost:27017/users`, { useNewUrlParser: true }), UserModule, AuthModule, ProductModule,
-
-  ConfigModule.forRoot({
-    validationSchema: Joi.object({
-      //...
-      JWT_SECRET: Joi.string().required(),
-      JWT_EXPIRATION_TIME: Joi.string().required(),
-    })
-  })
+  // TODO: Вынести переменную в env
+  imports: [
+    // MongooseModule.forRoot(`mongodb://localhost:27017/users`, {
+    //   useNewUrlParser: true,
+    // }),
+    UserModule,
+    AuthModule,
+    ProductModule,
+    ConfigModule.forRoot({
+      validationSchema: Joi.object({
+        //...
+        JWT_SECRET: Joi.string().required(),
+        JWT_EXPIRATION_TIME: Joi.string().required(),
+        MONGO_DATABASE: Joi.string().required(),
+        MONGO_HOST: Joi.string().required(),
+        MONGO_PORT: Joi.string().required(),
+      }),
+    }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => {
+        const database = configService.get('MONGO_DATABASE');
+        const host = configService.get('MONGO_HOST');
+        const port = configService.get('MONGO_PORT');
+        return {
+          uri: `mongodb://${host}:${port}`,
+          dbName: database,
+        };
+      },
+      inject: [ConfigService],
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
-
 })
-
-export class AppModule { }
+export class AppModule {}

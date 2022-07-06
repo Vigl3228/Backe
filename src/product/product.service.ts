@@ -6,14 +6,17 @@ import { UpdateProductDto } from './dtos/update-product.dto';
 import { Product, ProductDocument } from './product.schema';
 @Injectable()
 export class ProductService {
+    constructor(@InjectModel(Product.name) private productModel: Model<ProductDocument>) {
+
+    }
+
+
+    
     findallwhere(): Promise<Product[]> {
         throw new Error('Method not implemented.');
     }
 
 
-    constructor(@InjectModel(Product.name) private productModel: Model<ProductDocument>) {
-
-    }
 
     
     async getAll(): Promise<Product[]> {
