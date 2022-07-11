@@ -4,13 +4,13 @@ import { UserDetails } from 'src/user/user.interface';
 import { UserModule } from 'src/user/user.module';
 import { User, UserDocument } from 'src/user/user.schema';
  
-interface RequestWithUser extends Request {
-  user:  {
+interface RequestWithProducts extends Request {
+  product:  {
     _id: number;
-    name: string;
-    email: string;
-    password: string;
-    products: any;
+    title: string
+    text: string;
+    tags: string;
+    author: any;
   }//any;
 }
-export default RequestWithUser;
+export default RequestWithProducts;

@@ -1,13 +1,15 @@
 import { IsNotEmpty, IsString } from "class-validator"
 
 export class UpdateProductDto {
-   // @IsString()
-   // @IsNotEmpty()
+   @IsString()
+   @IsNotEmpty()
     readonly title: string
-   // @IsString()
-   // @IsNotEmpty()
+   @IsString()
+   @IsNotEmpty()
     readonly text: string
-  //  @IsNotEmpty()
-    readonly tags: string[]
+   @IsNotEmpty()
+    readonly tags: string
+    
+    //readonly author:any
 
 }

@@ -9,12 +9,19 @@ export class UserController {
 
     @Get(':id')
     @UseGuards(JwtGuard)
-    getUser(@Param('id') id: string) {
-        return this.UserService.findById(id) 
+    async getUser(@Param('id') id: string) {
+        return await this.UserService.findById(id) 
     }
     @Get()
     @UseGuards(JwtGuard)
-    getAll() {
-        return this.UserService.getAll()
+    async getAll() {
+        return await this.UserService.getAll()
     }
+
+    @Get('allposts')
+    async getAllPosts(
+    ) {
+      return await this.UserService.findAllProducts();
+    }
+  
 }

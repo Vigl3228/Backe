@@ -17,6 +17,7 @@ import {
   Res,
   UnauthorizedException,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { UserDetails } from 'src/user/user.interface';
@@ -27,8 +28,12 @@ import { ExistingUSerDTO } from 'src/user/dtos/such-user.dto';
 import RequestWithUser from './requestWithUser.interface';
 import { JwtGuard } from './guards/jwt.guard';
 import { LocalAuthenticationGuard } from './localAuthentication.guard';
+import MongooseClassSerializerInterceptor from 'src/mongooseClassSerializer.interceptor';
+import { User } from 'src/user/user.schema';
+
 
 @Controller('auth')
+// @UseInterceptors(MongooseClassSerializerInterceptor(User))
 export class AuthController {
   JwtService: any;
   constructor(
@@ -73,7 +78,7 @@ export class AuthController {
   @Post('logout')
   @UseGuards(JwtGuard)
   async logOut(@Req() request: RequestWithUser, @Res() response: Response) {
-    response.setHeader('Set-Cookie', this.authService.getCookieForLogOut());
+    response.setHeader('Set-Cookie', await this.authService.getCookieForLogOut());
     return response.sendStatus(200);
   }
 
