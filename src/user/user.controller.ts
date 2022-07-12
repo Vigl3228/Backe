@@ -1,4 +1,5 @@
 import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { ObjectId } from 'mongoose';
 import { JwtGuard } from 'src/auth/guards/jwt.guard';
 import { UserDetails } from './user.interface';
 import { UserService } from './user.service';
@@ -9,7 +10,7 @@ export class UserController {
 
     @Get(':id')
     @UseGuards(JwtGuard)
-    async getUser(@Param('id') id: number) {
+    async getUser(@Param('id') id: ObjectId) {
         return await this.UserService.findById(id) 
     }
     @Get()

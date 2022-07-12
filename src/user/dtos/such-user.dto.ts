@@ -1,4 +1,5 @@
 import { IsEmail, IsNotEmpty, IsString } from "class-validator";
+import { ObjectId } from "mongoose";
 
 export class ExistingUSerDTO {
     [x: string]: any
@@ -10,5 +11,5 @@ export class ExistingUSerDTO {
     password:string;
     //@IsString()
     //@IsNotEmpty()
-    id: number;
+    id: ObjectId;
 }

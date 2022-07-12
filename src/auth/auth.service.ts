@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { ObjectId } from 'mongoose';
 import { NewUSerDTO } from 'src/user/dtos/new-user.dto';
 import { ExistingUSerDTO } from 'src/user/dtos/such-user.dto';
 import { UserDetails } from 'src/user/user.interface';
@@ -37,7 +38,7 @@ export class AuthService {
     }
   }
 
-  async getCookieWithJwtToken(userId: number) {
+  async getCookieWithJwtToken(userId: ObjectId) {
     const payload = { userId };
     const token = this.jwtService.sign(payload);
     return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
@@ -48,7 +49,7 @@ export class AuthService {
   get(arg0: string) {
     throw new Error('Method not implemented.');
   }
-  findOne(arg0: { id: number; data: any }) {
+  findOne(arg0: { id: ObjectId; data: any }) {
     throw new Error('Method not implemented.');
   }
   constructor(

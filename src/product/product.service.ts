@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose'
+import { Model, ObjectId } from 'mongoose'
 import RequestWithUser from 'src/auth/requestWithUser.interface';
 import { NewUSerDTO } from 'src/user/dtos/new-user.dto';
 import { User, UserDocument } from 'src/user/user.schema';
@@ -37,11 +37,11 @@ export class ProductService {
     //     return newPost.save();
             
     // }
-    async getById(id: number): Promise<Product> {
+    async getById(id: ObjectId): Promise<Product> {
         return this.productModel.findById(id)
     }
 
-    async getByAuthor(id: number) {
+    async getByAuthor(id: ObjectId) {
         return this.productModel.findById(id)
     }
     findOne(arg0: { id: any }) {
@@ -60,6 +60,7 @@ export class ProductService {
     async getPostsUser(req: RequestWithUser): Promise<Product[]> {
         const result = await this.productModel.find({author: req.user})
         return result
+
     }
 
 
@@ -80,12 +81,12 @@ export class ProductService {
     //   }
     ////
 
-    async remove(id: number) {
+    async remove(id: ObjectId) {
         
         return this.productModel.findByIdAndRemove(id)
     }
     
-    async update(id: number, productdto: UpdateProductDto): Promise<Product> {
+    async update(id: ObjectId, productdto: UpdateProductDto): Promise<Product> {
         return this.productModel.findByIdAndUpdate(id, productdto, { new: true })
     }
 

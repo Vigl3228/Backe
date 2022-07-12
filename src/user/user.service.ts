@@ -2,7 +2,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import Module from 'module';
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { UserDetails } from './user.interface';
 import { UserModule } from './user.module';
 import { User, UserDocument } from './user.schema';
@@ -26,7 +26,7 @@ export class UserService {
     @InjectModel('User') private readonly userModel: Model<UserDocument>,
   ) {}
 
-  async getById(id: number) {
+  async getById(id: ObjectId) {
     const user = await this.userModel.findOne({ _id: id });
 
     if (user) {
@@ -77,7 +77,7 @@ export class UserService {
     return await newUser.save();
   }
 
-  async findById(id: number) {
+  async findById(id: ObjectId) {
     return await this.userModel.findOne({}).exec();
   }
 

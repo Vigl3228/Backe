@@ -1,5 +1,7 @@
+import { ObjectId } from "mongoose";
+
 export interface UserDetails{
-    id: number;
+    id: ObjectId;
     name: string;
     email: string;
 }

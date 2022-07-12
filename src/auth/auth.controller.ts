@@ -68,7 +68,6 @@ export class AuthController {
     //оидание пользователя | вернет данные пользователя
 
     const { user } = request;
-
     const cookie = await this.authService.getCookieWithJwtToken(user._id);
     response.setHeader('Set-Cookie', cookie);
     user.password = undefined;

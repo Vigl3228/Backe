@@ -10,7 +10,7 @@ export type ProductDocument = Product & Document;
 export class Product {
     
     @Transform(({ value }) => value.toString())
-    _id: number ; //ObjectId
+    _id: ObjectId ; //ObjectId
 
     @Prop({ required: true})
     title: string;

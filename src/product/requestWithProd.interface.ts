@@ -6,13 +6,13 @@ import { User, UserDocument } from 'src/user/user.schema';
  
 interface RequestWithProducts extends Request {
   product:  {
-    _id: number;
+    _id: ObjectId;
     title: string
     text: string;
     tags: string;
     author: 
     { 
-      _id: number;
+      _id: ObjectId;
       name: string;
       email: string;
       password: string;}
