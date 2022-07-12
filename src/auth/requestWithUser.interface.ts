@@ -10,7 +10,6 @@ interface RequestWithUser extends Request {
     name: string;
     email: string;
     password: string;
-    products: any;
   }//any;
 }
 export default RequestWithUser;

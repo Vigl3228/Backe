@@ -10,7 +10,12 @@ interface RequestWithProducts extends Request {
     title: string
     text: string;
     tags: string;
-    author: any;
+    author: 
+    { 
+      _id: number;
+      name: string;
+      email: string;
+      password: string;}
   }//any;
 }
 export default RequestWithProducts;

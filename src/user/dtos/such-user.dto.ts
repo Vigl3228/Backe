@@ -10,5 +10,5 @@ export class ExistingUSerDTO {
     password:string;
     //@IsString()
     //@IsNotEmpty()
-    id: any;
+    id: number;
 }

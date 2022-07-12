@@ -9,7 +9,7 @@ export class UserController {
 
     @Get(':id')
     @UseGuards(JwtGuard)
-    async getUser(@Param('id') id: string) {
+    async getUser(@Param('id') id: number) {
         return await this.UserService.findById(id) 
     }
     @Get()

@@ -18,10 +18,7 @@ export class User {
     password: string;
 
     ///////err
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "Product"})
-    @Type(() => Product)
-    products: Product;
-
+  
 
     
 }

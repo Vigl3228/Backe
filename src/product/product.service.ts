@@ -7,6 +7,7 @@ import { User, UserDocument } from 'src/user/user.schema';
 import { CreateProductDto } from './dtos/new-product.dto';
 import { UpdateProductDto } from './dtos/update-product.dto';
 import { Product, ProductDocument } from './product.schema';
+import RequestWithProducts from './requestWithProd.interface';
 @Injectable()
 export class ProductService {
     find() {
@@ -36,8 +37,16 @@ export class ProductService {
     //     return newPost.save();
             
     // }
+    async getById(id: number): Promise<Product> {
+        return this.productModel.findById(id)
+    }
 
-    
+    async getByAuthor(id: number) {
+        return this.productModel.findById(id)
+    }
+    findOne(arg0: { id: any }) {
+        throw new Error('Method not implemented.');
+      }
 
 
 
@@ -58,29 +67,26 @@ export class ProductService {
         const result = await this.productModel.find()
         return result
     }
-    async getById(id: string): Promise<Product> {
-        return this.productModel.findById(id)
-    }
-
-    async getByAuthor(id: string) {
-        return this.productModel.findById(id)
-    }
+    
   
 
+    // async author(req: RequestWithAll) {
+    //     console.log(req.user._id)
+    //     console.log(req.products.author._id)
+    //     if (req.products.author._id === req.user._id) {
+    //       return true;
+    //     } else {
+    //     return false;}
+    //   }
     ////
-    async remove(id: string) {
-        // const q = await this.userM.findOne({ _id: id });
-        // if ()
+
+    async remove(id: number) {
+        
         return this.productModel.findByIdAndRemove(id)
     }
-////
     
-    async update(id: string, productdto: UpdateProductDto): Promise<Product> {
+    async update(id: number, productdto: UpdateProductDto): Promise<Product> {
         return this.productModel.findByIdAndUpdate(id, productdto, { new: true })
     }
-
-
-
-
 
 }

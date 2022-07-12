@@ -9,9 +9,7 @@ import { User, UserDocument } from './user.schema';
 
 @Injectable()
 export class UserService {
-  findAll() {
-    throw new Error('Method not implemented.');
-  }
+ 
   async getByEmail(email: string) {
     const user = await this.userModel.findOne({ email });
 
@@ -43,7 +41,10 @@ export class UserService {
   // getById(userId: any) {
   //     throw new Error('Method not implemented.');
   // }
-  findOne(arg0: { id: any }) {
+  async findOne(arg0: { id: any }) { 
+
+
+
     throw new Error('Method not implemented.');
   }
 
@@ -76,7 +77,7 @@ export class UserService {
     return await newUser.save();
   }
 
-  async findById(id: string) {
+  async findById(id: number) {
     return await this.userModel.findOne({}).exec();
   }
 
