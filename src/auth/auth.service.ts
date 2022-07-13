@@ -46,12 +46,7 @@ export class AuthService {
     )}`;
   }
 
-  get(arg0: string) {
-    throw new Error('Method not implemented.');
-  }
-  findOne(arg0: { id: ObjectId; data: any }) {
-    throw new Error('Method not implemented.');
-  }
+
   constructor(
     private readonly usersService: UserService,
     private readonly jwtService: JwtService,

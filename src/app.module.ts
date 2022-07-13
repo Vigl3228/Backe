@@ -10,7 +10,9 @@ import { AuthService } from './auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { ProductModule } from './product/product.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ChatModule } from './chat/chat.module';
 import * as Joi from 'joi';
+import { MessageModule } from './message/message.module';
 
 @Module({
   // TODO: Вынести переменную в env
@@ -44,6 +46,8 @@ import * as Joi from 'joi';
       },
       inject: [ConfigService],
     }),
+    MessageModule,
+    ChatModule
   ],
   controllers: [AppController],
   providers: [AppService],

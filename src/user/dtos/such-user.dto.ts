@@ -1,15 +1,15 @@
-import { IsEmail, IsNotEmpty, IsString } from "class-validator";
-import { ObjectId } from "mongoose";
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 export class ExistingUSerDTO {
-    [x: string]: any
-    //@IsString()
-    //@IsNotEmpty()
-    email:string;
-    //@IsString()
-    //@IsNotEmpty()
-    password:string;
-    //@IsString()
-    //@IsNotEmpty()
-    id: ObjectId;
+  @IsString()
+  @IsNotEmpty()
+  fullName: string;
+  @IsString()
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+
 }

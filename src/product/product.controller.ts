@@ -79,7 +79,8 @@ export class ProductController {
       return await this.productService.remove(id);
   }
 
-  @Put(':id')
+  @Put('update/:id')
+  @UseGuards(JwtGuard, ProductCreatorGuard)
   async update(
     @Body() updateProductDto: UpdateProductDto,
     @Param('id') id: ObjectId,

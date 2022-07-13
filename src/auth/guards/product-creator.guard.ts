@@ -26,8 +26,6 @@ export class ProductCreatorGuard implements CanActivate {
     if (user?.role.includes(Role.Admin)) return true
     
     const userId = user._id
-    
-    
     const userChecked = await this.userService.getById(userId)
     
     //console.log(userChecked._id,productChecked.author._id )
