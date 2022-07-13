@@ -9,6 +9,9 @@ import { User, UserDocument } from './user.schema';
 
 @Injectable()
 export class UserService {
+  delete(arg0: { id: number; }) {
+    throw new Error('Method not implemented.');
+  }
  
   async getByEmail(email: string) {
     const user = await this.userModel.findOne({ email });

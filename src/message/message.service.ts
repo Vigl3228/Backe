@@ -26,6 +26,7 @@ export class MessageService {
       throw new HttpException('Not Acceptable', HttpStatus.NOT_ACCEPTABLE);
     }
   }
+  
   async getById(id: ObjectId): Promise<Message> {
     try {
       return await this.messageModel.findById(id);

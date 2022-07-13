@@ -1,25 +1,26 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule, Schema } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { IdeaSchema } from 'src/idea/idea.schema';
-import { IdeaService } from 'src/idea/idea.service';
+import { ProductrSchema } from 'src/product/product.schema';
+import { ProductService } from 'src/product/product.service';
+import { SubsSchema } from 'src/product/subs.schema';
 import { UserModule } from 'src/user/user.module';
 import { UserDocument, UserSchema } from 'src/user/user.schema';
 import { UserService } from 'src/user/user.service';
-import { ProductController } from './product.controller';
-import { Product, ProductrSchema } from './product.schema';
-import { ProductService } from './product.service';
-import { SubsSchema } from './subs.schema';
+import { IdeaController } from './idea.controller';
+import { IdeaSchema } from './idea.schema';
+import { IdeaService } from './idea.service';
 
 @Module({
   imports: [ 
     MongooseModule.forFeature([{name: 'Product', schema: ProductrSchema}]),
     MongooseModule.forFeature([{name: 'User', schema: UserSchema}]),
+    MongooseModule.forFeature([{name: 'Idea', schema: IdeaSchema}]),
     MongooseModule.forFeature([{name: 'Subs', schema: SubsSchema}]),
-    MongooseModule.forFeature([{name: 'Idea', schema: IdeaSchema}])
+
   ], 
-  controllers: [ProductController],
-  providers: [ProductService, UserService, IdeaService],
+  controllers: [IdeaController],
+  providers: [IdeaService, UserService, ProductService],
  // exports: [Model<UserDocument>] //?
 }) 
-export class ProductModule {}
+export class IdeaModule {}

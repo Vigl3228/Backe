@@ -21,6 +21,7 @@ import { CreateProductDto } from './dtos/new-product.dto';
 import { UpdateProductDto } from './dtos/update-product.dto';
 import { Product, ProductDocument } from './product.schema';
 import { ProductService } from './product.service';
+import { Subs } from './subs.schema';
 
 @Controller('product')
 export class ProductController {
@@ -60,15 +61,19 @@ export class ProductController {
     return await this.productService.getById(id);
   }
 
-  // @Get('q')
-  // async getPostAuth(@Req() request: RequestWithUser, author: User ){
+  @UseGuards(JwtGuard)
+  @Post('subscribe/:id')
+  async subscribe(@Req() req: RequestWithUser, @Param() param) {
+    const product = await this.productService.getProjectBySlug(param.id);
+    return await this.productService.subscribe(product, req.user);
+  }
 
-  //     const { user } = request;
+  @UseGuards(JwtGuard)
+  @Delete('unsubscribe/:id')
+  async unSubscribe(@Param() param) {
+    return await this.productService.unSubscribe(param.id);
+  }
 
-  //     if (user._id == )
-  //     return this.productService.
-
-  // }
 
   @Delete('delete/:id')
   @UseGuards(JwtGuard, ProductCreatorGuard)
@@ -86,5 +91,11 @@ export class ProductController {
     @Param('id') id: ObjectId,
   ): Promise<Product> {
     return await this.productService.update(id, updateProductDto);
+  }
+
+  @Get('allS')
+  @UseGuards(JwtGuard)
+  async getAllSub(){
+    return await this.productService.getAll();
   }
 }

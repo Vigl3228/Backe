@@ -13,6 +13,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ChatModule } from './chat/chat.module';
 import * as Joi from 'joi';
 import { MessageModule } from './message/message.module';
+import { IdeaModule } from './idea/idea.module';
 
 @Module({
   // TODO: Вынести переменную в env
@@ -47,7 +48,8 @@ import { MessageModule } from './message/message.module';
       inject: [ConfigService],
     }),
     MessageModule,
-    ChatModule
+    ChatModule,
+    IdeaModule
   ],
   controllers: [AppController],
   providers: [AppService],

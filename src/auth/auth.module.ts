@@ -7,6 +7,7 @@ import { ProductController } from 'src/product/product.controller';
 import { ProductModule } from 'src/product/product.module';
 import { ProductrSchema } from 'src/product/product.schema';
 import { ProductService } from 'src/product/product.service';
+import { SubsSchema } from 'src/product/subs.schema';
 import { UserController } from 'src/user/user.controller';
 import { UserModule } from 'src/user/user.module';
 import { UserSchema } from 'src/user/user.schema';
@@ -29,6 +30,7 @@ import { LocalStrategy } from './local.strategy';
     ConfigModule,
     MongooseModule.forFeature([{name: 'Product', schema: ProductrSchema}]),
     MongooseModule.forFeature([{name: 'User', schema: UserSchema}]),
+    MongooseModule.forFeature([{name: 'Subs', schema: SubsSchema}]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

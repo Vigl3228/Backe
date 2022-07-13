@@ -1,13 +1,16 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
+import { check } from 'prettier';
 import RequestWithUser from 'src/auth/requestWithUser.interface';
 import { NewUSerDTO } from 'src/user/dtos/new-user.dto';
 import { User, UserDocument } from 'src/user/user.schema';
+import { UserService } from 'src/user/user.service';
 import { CreateProductDto } from './dtos/new-product.dto';
 import { UpdateProductDto } from './dtos/update-product.dto';
 import { Product, ProductDocument } from './product.schema';
 import RequestWithProducts from './requestWithProd.interface';
+import { Subs, SubsDocument } from './subs.schema';
 
 @Injectable()
 export class ProductService {
@@ -16,6 +19,10 @@ export class ProductService {
     private productModel: Model<ProductDocument>,
     @InjectModel(User.name)
     private userModel: Model<UserDocument>,
+    @InjectModel(Subs.name)
+    private subsModel: Model<SubsDocument>,
+
+    private userService:UserService
   ) {}
 
   async create(productDto: CreateProductDto, author: User) {
@@ -31,14 +38,6 @@ export class ProductService {
     }
   }
 
-  // async add(userDto: NewUSerDTO, products: Product){
-  //     const newPost = new this.userModel({
-  //         ...userDto,
-  //         products
-  //     })
-  //     return newPost.save();
-
-  // }
   async getById(id: ObjectId): Promise<Product> {
     try {
       return await this.productModel.findById(id);
@@ -57,15 +56,6 @@ export class ProductService {
     return result;
   }
 
-  // async author(req: RequestWithAll) {
-  //     console.log(req.user._id)
-  //     console.log(req.products.author._id)
-  //     if (req.products.author._id === req.user._id) {
-  //       return true;
-  //     } else {
-  //     return false;}
-  //   }
-  ////
 
   async remove(id: ObjectId) {
     try {
@@ -84,4 +74,45 @@ export class ProductService {
       throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
     }
   }
+
+
+  async getProjectBySlug(id: ObjectId) {
+    const project = await this.productModel.findOne({
+      where: { id: id },
+      relations: ['author'],
+    });
+    if (project) {
+      return project;
+    }
+    throw new HttpException('Project not found', HttpStatus.FORBIDDEN);
+  }
+
+
+  async subscribe(product: Product, user: User) {
+    try{
+      const sub = await this.subsModel.create({
+        user: user,
+        product: product,
+      });
+      return sub.save();
+    }catch(error){
+    throw new HttpException('You cannot subscibe',HttpStatus.FORBIDDEN,);}
+  }
+  
+
+  async unSubscribe(id: ObjectId) {
+    try {
+      return await this.subsModel.findByIdAndRemove(id);
+    } catch (error) {
+      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+    }
+  }
+
+
+  async getAllSubs(){
+    const result = await this.subsModel.find();
+    return result;
+  }
+
+
 }
