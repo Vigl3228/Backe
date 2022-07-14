@@ -76,36 +76,35 @@ export class ProductService {
   }
 
   async Subscr(product: Product, user: User) {
-    const sub = await this.userService.getProd(user);
+    const sub = await this.getAllUs(user._id);
 
     for (var p of sub) {
-      if (p.id == product._id) {
+      if (p. toString() == product._id.toString()) {
         return false;
       }
     }
     return true;
   }
   async subscribe(product: Product, user: User) {
-   // try {
-    //console.log(user, product)
-    const authorCheck = await this.authorCheck(product, user);
-    //const refreshCheck = await this.Subscr(product, user);
-    console.log(authorCheck);
-    if (authorCheck ) {
-      console.log(product);
-      const sub = await this.subsModel.create({
-        user: user,
-        product: product
-      });
-      //{
-
-      
-      return sub.save();}
-   // } else
-    //  throw new HttpException('You cannot ssubscibe', HttpStatus.FORBIDDEN);
-   // } catch (error) {
-    //  throw new HttpException('You cannot ssubscibe', HttpStatus.FORBIDDEN);
-   // }
+    try {
+      //console.log(user, product);
+      const authorCheck = await this.authorCheck(product, user);
+      const refreshCheck = await this.Subscr(product, user);
+      console.log(refreshCheck);
+      if (authorCheck && refreshCheck) {
+        //console.log(product);
+        const sub = await this.subsModel.create({
+          user: user,
+          product: product,
+        });
+        {
+          return sub.save();
+        }
+      } else
+        throw new HttpException('You cannot ssubscibe', HttpStatus.FORBIDDEN);
+    } catch (error) {
+      throw new HttpException('You cannot ssubscibe', HttpStatus.FORBIDDEN);
+    }
   }
 
   async subscribes(product: Product, user: User) {
@@ -120,8 +119,6 @@ export class ProductService {
     }
   }
 
-
-  
   async unSubscribe(id: ObjectId) {
     try {
       return await this.subsModel.findByIdAndRemove(id);
@@ -130,15 +127,30 @@ export class ProductService {
     }
   }
 
-  async getAllSubs(productId:ObjectId) {
-    const subscribtions = await this.subsModel.find({product:productId.toString()});
-    
-    const subscribers = subscribtions.map(async (subscription)=>{
-      return   this.userModel.find({_id: subscription.user.toString()});
-    })
-   
+  async getAllSubs(productId: ObjectId) {
+    const subscribtions = await this.subsModel.find({
+      product: productId.toString(),
+    });
+
+    const subscribers = subscribtions.map(async (subscription) => {
+      return this.userModel.find({ _id: subscription.user.toString() });
+    });
+
     return Promise.all(subscribers);
   }
+
+
+  async getAllUs(userId: ObjectId) {
+    const subscribtionsUs = await this.subsModel.find({
+      user: userId.toString(),
+    });
+    //console.log(subscribtionsUs) проекты юзера
+    const subscribersUs = subscribtionsUs.map(async (subscriptionUs) => {
+      return this.productModel.find({ _id: subscriptionUs.product.toString() });
+    });
+    return Promise.all(subscribersUs);
+  }
+
 
   async authorCheck(product: Product, user: User) {
     const qq = product.author._id.toString();

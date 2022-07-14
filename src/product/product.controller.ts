@@ -17,6 +17,7 @@ import { ProductCreatorGuard } from 'src/auth/guards/product-creator.guard';
 import Role from 'src/auth/guards/role.enum';
 import { LocalAuthenticationGuard } from 'src/auth/localAuthentication.guard';
 import RequestWithUser from 'src/auth/requestWithUser.interface';
+import { UserService } from 'src/user/user.service';
 import { CreateProductDto } from './dtos/new-product.dto';
 import { UpdateProductDto } from './dtos/update-product.dto';
 import { Product, ProductDocument } from './product.schema';
@@ -25,7 +26,8 @@ import { Subs } from './subs.schema';
 
 @Controller('product')
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+  constructor(private readonly productService: ProductService,
+    private readonly userService: UserService) {}
 
   @Post('create')
   @UseGuards(JwtGuard)
@@ -73,6 +75,13 @@ export class ProductController {
   async getAllSubscribers( @Param() param) {
     const product = await this.productService.getById(param.id);
     return await this.productService.getAllSubs(product._id);
+  }
+
+  @UseGuards(JwtGuard)
+  @Get('getProductS/:id')
+  async getAllProducts( @Req() req: RequestWithUser) {
+    const user = await this.userService.getById(req.user._id);
+    return await this.productService.getAllUs(user._id);
   }
   //когда происходит подписка в массив продукта добавлялись подписанные пользователи
 

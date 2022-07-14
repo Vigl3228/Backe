@@ -4,6 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import Module from 'module';
 import { Model, ObjectId } from 'mongoose';
 import { Product, ProductDocument } from 'src/product/product.schema';
+import { SubsDocument } from 'src/product/subs.schema';
 import { UserDetails } from './user.interface';
 import { UserModule } from './user.module';
 import { User, UserDocument } from './user.schema';
@@ -30,6 +31,8 @@ export class UserService {
     @InjectModel('User') private readonly userModel: Model<UserDocument>,
     @InjectModel('Product')
     private productModel: Model<ProductDocument>,
+    @InjectModel('Subs')
+    private subsModel: Model<SubsDocument>,
   ) {}
 
   async getById(id: ObjectId) {
@@ -93,24 +96,26 @@ export class UserService {
 
 
   async getProd(user: User) {
-    const productId = await this.userModel.find({
+    const productId = await this.subsModel.find({
+      relations: ["user", "product"],
       where: {
         user: {
-          id: user._id
+          id: user._id.toString()
         }
-      }, relations: ["user"]
+      }
     })
     const subbedProjects = []
+   //console.log(productId)
     for (var p of productId) {
       subbedProjects.push(await this.productModel.findOne({
         where:{
           subscribers: {
-            id: p.id
+            id: p.id.toString()
           }
         }
       }))
     }
-
+    console.log(subbedProjects)
     return subbedProjects
   }
 }
