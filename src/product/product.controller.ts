@@ -61,12 +61,20 @@ export class ProductController {
     return await this.productService.getById(id);
   }
 
+
   @UseGuards(JwtGuard)
   @Post('subscribe/:id')
   async subscribe(@Req() req: RequestWithUser, @Param() param) {
-    const product = await this.productService.getProjectBySlug(param.id);
+    const product = await this.productService.getById(param.id);
     return await this.productService.subscribe(product, req.user);
   }
+  @UseGuards(JwtGuard)
+  @Get('getSubscribe/:id')
+  async getAllSubscribers( @Param() param) {
+    const product = await this.productService.getById(param.id);
+    return await this.productService.getAllSubs(product._id);
+  }
+  //когда происходит подписка в массив продукта добавлялись подписанные пользователи
 
   @UseGuards(JwtGuard)
   @Delete('unsubscribe/:id')
@@ -98,4 +106,12 @@ export class ProductController {
   async getAllSub(){
     return await this.productService.getAll();
   }
+
+
+  @Get('allPost')
+  @UseGuards(JwtGuard)
+  async getPostsUsers(@Req() req: RequestWithUser) {
+    return await this.productService.getPostsUser(req);
+  }
+
 }

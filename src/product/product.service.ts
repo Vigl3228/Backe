@@ -22,12 +22,13 @@ export class ProductService {
     @InjectModel(Subs.name)
     private subsModel: Model<SubsDocument>,
 
-    private userService:UserService
+    private userService: UserService,
   ) {}
 
   async create(productDto: CreateProductDto, author: User) {
     try {
       const newProduct = new this.productModel({
+        /////
         ...productDto,
         author,
       });
@@ -56,7 +57,6 @@ export class ProductService {
     return result;
   }
 
-
   async remove(id: ObjectId) {
     try {
       return await this.productModel.findByIdAndRemove(id);
@@ -75,31 +75,53 @@ export class ProductService {
     }
   }
 
+  async Subscr(product: Product, user: User) {
+    const sub = await this.userService.getProd(user);
 
-  async getProjectBySlug(id: ObjectId) {
-    const project = await this.productModel.findOne({
-      where: { id: id },
-      relations: ['author'],
-    });
-    if (project) {
-      return project;
+    for (var p of sub) {
+      if (p.id == product._id) {
+        return false;
+      }
     }
-    throw new HttpException('Project not found', HttpStatus.FORBIDDEN);
+    return true;
+  }
+  async subscribe(product: Product, user: User) {
+   // try {
+    //console.log(user, product)
+    const authorCheck = await this.authorCheck(product, user);
+    //const refreshCheck = await this.Subscr(product, user);
+    console.log(authorCheck);
+    if (authorCheck ) {
+      console.log(product);
+      const sub = await this.subsModel.create({
+        user: user,
+        product: product
+      });
+      //{
+
+      
+      return sub.save();}
+   // } else
+    //  throw new HttpException('You cannot ssubscibe', HttpStatus.FORBIDDEN);
+   // } catch (error) {
+    //  throw new HttpException('You cannot ssubscibe', HttpStatus.FORBIDDEN);
+   // }
   }
 
-
-  async subscribe(product: Product, user: User) {
-    try{
+  async subscribes(product: Product, user: User) {
+    try {
       const sub = await this.subsModel.create({
         user: user,
         product: product,
       });
       return sub.save();
-    }catch(error){
-    throw new HttpException('You cannot subscibe',HttpStatus.FORBIDDEN,);}
+    } catch (error) {
+      throw new HttpException('You cannot subscibe', HttpStatus.FORBIDDEN);
+    }
   }
-  
 
+
+  
   async unSubscribe(id: ObjectId) {
     try {
       return await this.subsModel.findByIdAndRemove(id);
@@ -108,11 +130,23 @@ export class ProductService {
     }
   }
 
-
-  async getAllSubs(){
-    const result = await this.subsModel.find();
-    return result;
+  async getAllSubs(productId:ObjectId) {
+    const subscribtions = await this.subsModel.find({product:productId.toString()});
+    
+    const subscribers = subscribtions.map(async (subscription)=>{
+      return   this.userModel.find({_id: subscription.user.toString()});
+    })
+   
+    return Promise.all(subscribers);
   }
 
-
+  async authorCheck(product: Product, user: User) {
+    const qq = product.author._id.toString();
+    const ww = user._id.toString();
+    if (qq == ww) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 }

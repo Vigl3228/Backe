@@ -18,10 +18,11 @@ export class Product {
 
     @Prop({ required: true})
     title: string;
-    @Prop({ required: true, unique: true  })
+    @Prop({ required: false, unique: true  })
     text: string;
     @Prop({ required: true})
     tags: string;
+
     
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "User" })
     @Type(() => User)
@@ -29,12 +30,9 @@ export class Product {
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "Subs" })
     @Type(() => Subs)
-    subs: Subs[];
+    user: Subs[];//пользователь и все его проекты
 
    
-
-
-
 }
 
 export const ProductrSchema = SchemaFactory.createForClass(Product);

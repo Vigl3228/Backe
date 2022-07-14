@@ -17,7 +17,7 @@ export class Idea {
     title: string;
     @Prop({ required: true})
     text: string;
-
+    
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "Product" })
     @Type(() => Product)
     product: Product;
